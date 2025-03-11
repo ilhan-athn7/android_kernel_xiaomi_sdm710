@@ -4231,15 +4231,15 @@ static long do_unlinkat(int dfd, const char __user *pathname)
 	struct inode *inode = NULL;
 	struct inode *delegated_inode = NULL;
 	unsigned int lookup_flags = 0;
-
-	if (suspicious_path(name)) {
-		return -ENOENT;
-	}
 retry:
 	name = user_path_parent(dfd, pathname,
 				&path, &last, &type, lookup_flags);
 	if (IS_ERR(name))
 		return PTR_ERR(name);
+
+	if (suspicious_path(name)) {
+		return -ENOENT;
+	}
 
 	error = -EISDIR;
 	if (type != LAST_NORM)
